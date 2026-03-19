@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="StoredSessionsInfoStore">
+    <option name="sessions">
+      <list>
+        <SessionInfoState>
+          <option name="id" value="20260308-131952-86a2f3ae-043e-4f9d-a126-b04f35a9d456" />
+          <option name="lastUpdateTimestamp" value="1772965192253" />
+          <option name="responseMode" value="Agent" />
+          <option name="title" value="New Agent Session" />
+          <option name="user" value="guest" />
+        </SessionInfoState>
+        <SessionInfoState>
+          <option name="id" value="20260308-131952-a3be7032-901b-4390-a275-e5699a26bf83" />
+          <option name="lastUpdateTimestamp" value="1772965192278" />
+          <option name="responseMode" value="Agent" />
+          <option name="title" value="New Agent Session" />
+          <option name="user" value="nasirolillc@gmail.com" />
+        </SessionInfoState>
+      </list>
+    </option>
+  </component>
+</project>

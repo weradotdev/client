@@ -1,0 +1,59 @@
+{
+  "cli": {
+    "version": ">= 18.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "channel": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "image": "latest"
+      },
+      "channel": "preview",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "EAS_BUILD_DISABLE_NPM_CACHE": "1",
+        "EXPO_PUBLIC_API_URL": "https://api.wera.dev",
+        "EXPO_PUBLIC_API_VERSION": "v1",
+        "EXPO_PUBLIC_FCM_VAPID_KEY": "BEbr7HUFmrCh1v8d5Mg4RrDYHJMye73Ka6P9GgZMivQmbJ_DInSYrPlXDU_IyuitYxz1yFeJ_HGZhrnHb74Dcus",
+        "EXPO_PUBLIC_GOOGLE_MAPS_APIKEY": "AIzaSyBcD92iJwakizMGBWTxBXq3tVAdLFHZquo"
+      }
+    },
+    "production": {
+      "channel": "production",
+      "autoIncrement": true,
+      "ios": {
+        "buildConfiguration": "Release"
+      },
+      "env": {
+        "EAS_BUILD_DISABLE_NPM_CACHE": "1",
+        "EXPO_PUBLIC_API_URL": "https://api.wera.dev",
+        "EXPO_PUBLIC_API_VERSION": "v1",
+        "EXPO_PUBLIC_FCM_VAPID_KEY": "BEbr7HUFmrCh1v8d5Mg4RrDYHJMye73Ka6P9GgZMivQmbJ_DInSYrPlXDU_IyuitYxz1yFeJ_HGZhrnHb74Dcus",
+        "EXPO_PUBLIC_GOOGLE_MAPS_APIKEY": "AIzaSyBcD92iJwakizMGBWTxBXq3tVAdLFHZquo"
+      }
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "production"
+      },
+      "ios": {
+        "appleId": "maukoese@icloud.com",
+        "appleTeamId": "MY3V68QF88"
+      }
+    }
+  }
+}

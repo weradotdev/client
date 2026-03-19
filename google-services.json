@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "156627544148",
+    "project_id": "devdotwera",
+    "storage_bucket": "devdotwera.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:156627544148:android:e2597e6256617cfcd1e5c1",
+        "android_client_info": {
+          "package_name": "dev.dot.wera"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXho8FH5aACpFp6EtJQnszGUJeWt_cDME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

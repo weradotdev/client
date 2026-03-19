@@ -1,11 +1,11 @@
 /**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
+ * Theme constants (spacing, fonts, etc.). For colors use Uniwind/Tailwind classes (e.g. bg-background, text-foreground).
  */
 
-import '@/global.css';
-
 import { Platform } from 'react-native';
+
+/** Primary purple used for tab tint, FAB, headers, and CTAs (matches design) */
+export const BrandPurple = '#6B4E9E';
 
 export const Colors = {
   light: {
@@ -14,6 +14,7 @@ export const Colors = {
     backgroundElement: '#F0F0F3',
     backgroundSelected: '#E0E1E6',
     textSecondary: '#60646C',
+    brand: BrandPurple,
   },
   dark: {
     text: '#ffffff',
@@ -21,6 +22,7 @@ export const Colors = {
     backgroundElement: '#212225',
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
+    brand: '#8B6BBE',
   },
 } as const;
 
