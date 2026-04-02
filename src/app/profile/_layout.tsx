@@ -12,6 +12,7 @@ export default function ProfileLayout() {
 				headerStyle: { backgroundColor: "#ffffff" },
 				headerTintColor: String(primaryColor),
 			}}
-		/>
+		>
+			</Stack>
 	);
 }

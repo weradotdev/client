@@ -22,8 +22,6 @@ import { useCSSVariable } from "uniwind";
 import { useQuery } from "@tanstack/react-query";
 import { useTasksStore } from "@/stores/tasks";
 
-const FILTER_OPTIONS = ["All", "Upcoming", "In Progress", "Review"] as const;
-
 export default function HomeScreen() {
 	const router = useRouter();
 
@@ -57,8 +55,10 @@ export default function HomeScreen() {
 		queryKey: ["boards", currentProject?.id],
 		queryFn: () =>
 			api<Board>("boards").search("", [
-				"forProject",
-				{ projectId: currentProject?.id },
+				{
+					name: "forProject",
+					parameters: [currentProject?.id],
+				},
 			]),
 	});
 
@@ -69,10 +69,18 @@ export default function HomeScreen() {
 	} = useQuery({
 		queryKey: ["tasks", user?.id],
 		queryFn: () =>
-			api<Task>("tasks").search(undefined, [
-				"forUser",
-				{ userId: user?.id },
-			]),
+			api<Task>("tasks").search(
+				undefined,
+				[{ name: "forUser", parameters: [user?.id] }],
+				[{ field: "created_at", operator: ">=", value: "2020-01-01" }],
+				undefined,
+				[
+					{
+						relation: "assignedUsers",
+						type: "count",
+					},
+				],
+			),
 	});
 
 	const {
@@ -83,20 +91,12 @@ export default function HomeScreen() {
 		queryKey: ["projects", user?.id],
 		queryFn: () =>
 			api<Project>("projects").search(undefined, [
-				"forUser",
-				{ userId: user?.id },
+				{ name: "forUser", parameters: [{ userId: user?.id }] },
 			]),
 	});
 
-	const effectiveCurrent = currentProject ?? projects?.data[0] ?? null;
-
 	const primaryColor =
 		currentProject?.color || useCSSVariable("--color-primary");
-
-	const onRefresh = useCallback(async () => {
-		refetchProjects();
-		refetchTasks();
-	}, []);
 
 	const displayName = user?.name ?? user?.email?.split("@")[0] ?? "Imran";
 
@@ -136,6 +136,12 @@ export default function HomeScreen() {
 		return filteredByStore.filter(task => task.board_id === activeFilter);
 	}, [filteredByStore, activeFilter]);
 
+	const onRefresh = useCallback(async () => {
+		refetchProjects();
+		refetchTasks();
+		refetchBoards();
+	}, [refetchProjects, refetchTasks, refetchBoards]);
+
 	const onTaskPress = useCallback(
 		(task: Task) => {
 			setTask(task);
@@ -171,7 +177,7 @@ export default function HomeScreen() {
 											user?.avatar ??
 											"",
 									}}
-									className="w-12 h-12 ios:w-9 ios:h-9 rounded-full"
+									className="w-12 h-12 ios:w-9 ios:h-9 rounded-full bg-white/50 shadow-sm"
 									resizeMode="cover"
 								/>
 
@@ -233,27 +239,38 @@ export default function HomeScreen() {
 							<StatsCard
 								value={stats.total_tasks}
 								label="All Tasks"
+								href={{ pathname: "/tasks" }}
 							/>
+							
 							<StatsCard
 								value={stats.completed_tasks}
 								label="Completed"
+								href={{ pathname: "/tasks", params: { status: "completed" } }}
 							/>
+							
 							<StatsCard
 								value={stats.in_progress_tasks}
 								label="In Progress"
+								href={{ pathname: "/tasks", params: { status: "in-progress" } }}
 							/>
+							
 							<StatsCard
 								value={stats.overdue_tasks}
 								label="Overdue"
+								href={{ pathname: "/tasks", params: { status: "overdue" } }}
 							/>
+							
 							<StatsCard
 								value={stats.active_projects}
 								label="Projects"
+								href={{ pathname: "/projects" }}
 							/>
+							
 							<StatsCard
 								value={`${stats.completion_rate}%`}
-								label="Completion Rate"
+								label="Completion"
 								variant="accent"
+								href={{ pathname: "/stats" }}
 							/>
 						</>
 					) : (

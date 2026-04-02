@@ -30,22 +30,12 @@ export default function AppTabs() {
 				<NativeTabs.Trigger.Icon sf="calendar" />
 			</NativeTabs.Trigger>
 
-			<NativeTabs.Trigger name="(updates)">
+			<NativeTabs.Trigger name="updates">
 				<NativeTabs.Trigger.Label>Updates</NativeTabs.Trigger.Label>
 				<NativeTabs.Trigger.Icon sf="message" />
 			</NativeTabs.Trigger>
 
-			<NativeTabs.Trigger name="(add)" role="search">
-				<NativeTabs.Trigger.Label>Add</NativeTabs.Trigger.Label>
-				<NativeTabs.Trigger.Icon
-					sf={{
-						selected: "plus",
-						default: "plus",
-					}}
-				/>
-			</NativeTabs.Trigger>
-
-			<NativeTabs.Trigger name="(notifications)">
+			<NativeTabs.Trigger name="notifications">
 				<NativeTabs.Trigger.Label>
 					Notifications
 				</NativeTabs.Trigger.Label>
@@ -56,6 +46,16 @@ export default function AppTabs() {
 						{notifications.total.toString()}
 					</NativeTabs.Trigger.Badge>
 				)}
+			</NativeTabs.Trigger>
+
+			<NativeTabs.Trigger name="add" role="search">
+				<NativeTabs.Trigger.Label>Add</NativeTabs.Trigger.Label>
+				<NativeTabs.Trigger.Icon
+					sf={{
+						selected: "plus",
+						default: "plus",
+					}}
+				/>
 			</NativeTabs.Trigger>
 		</NativeTabs>
 	);

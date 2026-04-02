@@ -58,7 +58,7 @@ export default function HPressable({
 					(label ? (
 						<HText
 							className={twMerge(
-								"text-white text-lg",
+								"text-white text-base",
 								variant === "outline" && "text-primary",
 								variant === "tertiary" && "text-foreground",
 								labelClassName,

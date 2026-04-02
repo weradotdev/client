@@ -18,7 +18,7 @@ import {
 import HPressable from "@/components/pressable";
 import HText from "@/components/text";
 import { type DueDateFilter, type TaskFiltersState, useFiltersStore } from "@/stores/filters";
-import { type Task, useTasksStore } from "@/stores/tasks";
+import { useTasksStore } from "@/stores/tasks";
 import { useCSSVariable } from "uniwind";
 
 const PRIORITIES = [
@@ -59,9 +59,9 @@ export default function FilterScreen() {
 		const list: { id: string; avatar: string }[] = [];
 		for (const task of tasks) {
 			for (const u of task.users) {
-				if (!seen.has(u.id)) {
-					seen.add(u.id);
-					list.push({ id: u.id, avatar: u.avatar });
+				if (!seen.has(String(u.id))) {
+					seen.add(String(u.id));
+					list.push({ id: String(u.id), avatar: u.avatar });
 				}
 			}
 		}
@@ -71,7 +71,7 @@ export default function FilterScreen() {
 	const projectSuggestions = useMemo(() => {
 		const set = new Set<string>();
 		tasks.forEach((t: Task) => {
-			if (t.project) set.add(t.project);
+			if (t.project) set.add(String(t.project.id));
 		});
 		return Array.from(set).sort();
 	}, [tasks]);
@@ -115,7 +115,7 @@ export default function FilterScreen() {
 			/>
 			<ScrollView
 				className="flex-1 bg-background"
-				contentContainerClassName="px-4 pb-32"
+				contentContainerClassName="px-4 pb-32 android:pt-10"
 				showsVerticalScrollIndicator={false}
 			>
 				{/* Priority */}

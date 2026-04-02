@@ -2,18 +2,21 @@
  * API resource types aligned with backend API docs (document.json).
  * Add [key: string]: unknown if you need to allow extra API fields.
  */
-
-/** UserResource from API: id, name, email, phone, type, avatar, email_verified_at, created_at, updated_at */
 interface UserResource {
 	id: number;
+	first_name: string;
+	last_name: string;
 	name: string;
 	email: string;
 	phone: string;
 	type: string;
+	gender: string;
+	dob: string;
 	avatar: string;
-	email_verified_at: string | null;
-	created_at: string;
-	updated_at: string;
+	avatar_url: string;
+	email_verified_at?: string | null;
+	created_at?: string;
+	updated_at?: string;
 	workspaces?: unknown[];
 	projects?: unknown[];
 	assigned_tasks?: unknown[];
@@ -96,6 +99,7 @@ interface Task {
 	start_at?: string;
 	end_at?: string;
 	comments: Coment[];
+	users: User[];
 	[key: string]: unknown;
 }
 

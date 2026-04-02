@@ -1,7 +1,7 @@
 import { createJSONStorage, persist } from "zustand/middleware";
 
-import { create } from "zustand";
 import { createMMKV } from "react-native-mmkv";
+import { create } from "zustand";
 
 export const storage = createMMKV({
 	id: "auth-storage",
@@ -10,6 +10,7 @@ export const storage = createMMKV({
 export const useAuthStore = create<{
 	token: string | null;
 	user: User | null;
+	avatarUrl: string | null;
 	authenticated: boolean;
 	verified: boolean;
 	onboarded: boolean;
@@ -23,6 +24,7 @@ export const useAuthStore = create<{
 	setCurrentWorkspace: (workspace: Workspace | null) => void;
 	setToken: (token: string | null) => void;
 	setUser: (user: User) => void;
+	setAvatarUrl: (avatarUrl: string | null) => void;
 	setAuthenticated: (authenticated: boolean) => void;
 	setVerified: (verified: boolean) => void;
 	setOnboarded: (onboarded: boolean) => void;
@@ -34,6 +36,7 @@ export const useAuthStore = create<{
 		set => ({
 			token: null,
 			user: null,
+			avatarUrl: null,
 			authenticated: false,
 			verified: false,
 			onboarded: false,
@@ -48,9 +51,14 @@ export const useAuthStore = create<{
 				set({ currentWorkspace: workspace }),
 			setSearchQuery: query => set({ searchQuery: query }),
 			setToken: token => set({ token }),
+			setAvatarUrl: avatarUrl => set({ avatarUrl }),
 			setUser: user =>
 				set(state => ({
 					user: { ...state.user, ...user },
+					avatarUrl:
+						user.avatar_url ??
+						(state.user ? { ...state.user, ...user }.avatar_url : null) ??
+						null,
 					authenticated: true,
 				})),
 			setAuthenticated: authenticated => set({ authenticated }),
@@ -61,6 +69,7 @@ export const useAuthStore = create<{
 				set({
 					token: null,
 					user: null,
+					avatarUrl: null,
 					authenticated: false,
 					onboarded: true,
 				});
@@ -76,6 +85,7 @@ export const useAuthStore = create<{
 			partialize: state => ({
 				token: state.token,
 				user: state.user,
+				avatarUrl: state.avatarUrl,
 				currentProject: state.currentProject,
 				authenticated: state.authenticated,
 			}),

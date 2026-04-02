@@ -1,20 +1,18 @@
-import { ArrowRight, Edit01Icon, UserIcon } from "@hugeicons/core-free-icons";
-import {
-	Image,
-	ImageBackground,
-	Pressable,
-	ScrollView,
-	View,
-} from "react-native";
+import { ArrowRight, Edit01Icon } from "@hugeicons/core-free-icons";
 import { Stack, useRouter } from "expo-router";
+import {
+  ImageBackground,
+  Pressable,
+  ScrollView,
+  View
+} from "react-native";
 
 import HText from "@/components/text";
-import { HeaderBackButton } from "@react-navigation/elements";
-import { HugeiconsIcon } from "@hugeicons/react-native";
-import { SymbolView } from "expo-symbols";
 import { useAuthStore } from "@/stores/auth";
-import { useCSSVariable } from "uniwind";
+import { HugeiconsIcon } from "@hugeicons/react-native";
+import { HeaderBackButton } from "@react-navigation/elements";
 import { useMemo } from "react";
+import { useCSSVariable } from "uniwind";
 
 const AVATAR_URI =
 	"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop";
@@ -64,6 +62,7 @@ export default function ProfileScreen() {
 	const router = useRouter();
 	const primaryColor = useCSSVariable("--color-primary");
 	const user = useAuthStore(s => s.user);
+	const avatarUrl = useAuthStore(s => s.avatarUrl);
 	const currentProject = useAuthStore(s => s.currentProject);
 	const logout = useAuthStore(s => s.logout);
 
@@ -105,14 +104,14 @@ export default function ProfileScreen() {
 				{/* User card */}
 				<View className="px-4 pb-6 flex-row items-center gap-4">
 					<ImageBackground
-						source={{ uri: user?.avatar ?? AVATAR_URI }}
+						source={{ uri: avatarUrl ?? user?.avatar_url ?? user?.avatar ?? AVATAR_URI }}
 						className="w-20 h-20 relative"
 						imageClassName="w-20 h-20 rounded-full bg-primary/20"
 						resizeMode="cover"
 					>
 						<Pressable
 							className="absolute right-0 top-0"
-							onPress={() => router.push("/profile/account")}
+							onPress={() => router.push("/profile/avatar")}
 						>
 							<HugeiconsIcon
 								icon={Edit01Icon}

@@ -1,7 +1,7 @@
 import { FetchRequestInit, fetch } from "expo/fetch";
 
-import { FormApi } from "@tanstack/react-form";
 import { useAuthStore } from "@/stores/auth";
+import { FormApi } from "@tanstack/react-form";
 
 const VERSION = process.env.EXPO_PUBLIC_API_BASE_VERSION || "v1";
 
@@ -13,13 +13,19 @@ export class ApiClient {
 		this.baseURL = !!baseUrl ? `${baseUrl}/${VERSION}` : defaultBaseURL;
 	}
 
+	private buildUrl(endpoint: string): string {
+		const normalizedEndpoint = endpoint.replace(/^\/+/, "");
+
+		return `${this.baseURL}/${normalizedEndpoint}`;
+	}
+
 	private async request<T>(
 		endpoint: string,
 		options: FetchRequestInit = {},
 	): Promise<T> {
 		const { token } = useAuthStore.getState();
 
-		const url = `${this.baseURL}/${endpoint}`;
+		const url = this.buildUrl(endpoint);
 		const config: FetchRequestInit = {
 			headers: {
 				"Content-Type": "application/json",
@@ -35,8 +41,7 @@ export class ApiClient {
 		const response = await fetch(url, config);
 
 		if (response.ok) {
-
-			const res=  response.json();
+			const res = response.json();
 
 			console.info("API RES", endpoint, res);
 
@@ -83,7 +88,7 @@ export class ApiClient {
 	): Promise<T> {
 		const token = useAuthStore.getState().token;
 
-		const url = `${this.baseURL}${endpoint}`;
+		const url = this.buildUrl(endpoint);
 		const config: FetchRequestInit = {
 			method: "POST",
 			headers: {
@@ -113,7 +118,7 @@ export class ApiClient {
 				throw error;
 			}
 
-			const res=  response.json();
+			const res = response.json();
 
 			console.info("Upload response:", res);
 
@@ -195,10 +200,37 @@ export type Paginated<T> = {
 
 export type ApiMethods<M = Record<string, unknown>> = {
 	get<N>(path: string, limit?: number, page?: number): Promise<N>;
+	uploadRequest<N>(path: string, formData: FormData): Promise<N>;
 	index(limit?: number, page?: number): Promise<Paginated<M>>;
 	search(
-		query?: string,
-		scope?: ScopeTuple,
+		search?: string,
+		scopes?: Array<{ name: string; parameters?: any[] }>,
+		filters?: Array<{
+			field?: string;
+			operator?: string;
+			value?: any;
+			type?: string;
+		}>,
+		sort?: Array<{ field: string; direction: "asc" | "desc" }>,
+		aggregates?: Array<{
+			relation: string;
+			type: string;
+			filters?: Array<{
+				field?: string;
+				operator?: string;
+				value?: any;
+				type?: string;
+			}>;
+		}>,
+		includes?: Array<{
+			relation: string;
+			filters?: Array<{
+				field?: string;
+				operator?: string;
+				value?: any;
+				type?: string;
+			}>;
+		}>,
 		limit?: number,
 		page?: number,
 	): Promise<Paginated<M>>;
@@ -209,10 +241,6 @@ export type ApiMethods<M = Record<string, unknown>> = {
 	destroy(key: string | number, force?: boolean): Promise<M>;
 };
 
-/**
- * Get typed API for a resource by name.
- * @example api('tasks').search('upgrade', ['forUser', { userId: 1 }])
- */
 export function api<K>(resourceName?: string): ApiMethods<K> {
 	const basePath = resourceName;
 
@@ -222,24 +250,54 @@ export function api<K>(resourceName?: string): ApiMethods<K> {
 				limit,
 				page,
 			}),
+		uploadRequest: async <N>(path: string, formData: FormData) =>
+			await new ApiClient().upload<N>(path, formData),
 		index: async (limit = 15, page = 1) =>
 			await new ApiClient().get<Paginated<K>>(String(basePath), {
 				limit,
 				page,
 			}),
 		search: async (
-			query?: string,
-			scope?: ScopeTuple,
-			limit = 15,
-			page = 1,
+			search?: string,
+			scopes?: Array<{ name: string; parameters?: any[] }>,
+			filters?: Array<{
+				field?: string;
+				operator?: string;
+				value?: any;
+				type?: string;
+			}>,
+			sort?: Array<{ field: string; direction: "asc" | "desc" }>,
+			aggregates?: Array<{
+				relation: string;
+				type: string;
+				filters?: Array<{
+					field?: string;
+					operator?: string;
+					value?: any;
+					type?: string;
+				}>;
+			}>,
+			includes?: Array<{
+				relation: string;
+				filters?: Array<{
+					field?: string;
+					operator?: string;
+					value?: any;
+					type?: string;
+				}>;
+			}>,
+			limit?: number,
+			page?: number,
 		) =>
 			await new ApiClient().post<Paginated<K>>(
 				`${String(basePath)}/search`,
 				{
-					scope,
-					search: { value: query ?? "" },
-					filters: [],
-					sort: [],
+					...(scopes && { scopes }),
+					...(search && { search: { value: search ?? "" } }),
+					...(filters && { filters }),
+					...(sort && { sort }),
+					...(aggregates && { aggregates }),
+					...(includes && { includes }),
 				},
 				{ limit, page },
 			),

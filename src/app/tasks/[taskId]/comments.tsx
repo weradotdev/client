@@ -1,20 +1,19 @@
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { Stack, router, useLocalSearchParams } from "expo-router";
+import { useCallback, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { HeaderBackButton } from "@react-navigation/elements";
-import { Spacing } from "@/constants/theme";
+
+import HPressable from "@/components/pressable";
 import HText from "@/components/text";
 import HTextInput from "@/components/text-input";
-import HPressable from "@/components/pressable";
-import { router, Stack, useLocalSearchParams } from "expo-router";
-import { useCallback, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { HeaderBackButton } from "@react-navigation/elements";
 import { Image } from "react-native";
-import { type AuthUser, useAuthStore } from "@/stores/auth";
+import { Spacing } from "@/constants/theme";
+import { useAuthStore } from "@/stores/auth";
+import { useCSSVariable } from "uniwind";
 import {
-	type TaskComment as TaskCommentType,
-	type TasksState,
 	useTasksStore,
 } from "@/stores/tasks";
-import { useCSSVariable } from "uniwind";
 
 const DEFAULT_AVATAR =
 	"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop";
@@ -25,9 +24,9 @@ export default function TaskCommentsScreen() {
 
 	const { taskId } = useLocalSearchParams<{ taskId: string }>();
 	const queryClient = useQueryClient();
-	const authUser = useAuthStore((s: { user: AuthUser | null }) => s.user);
-	const getComments = useTasksStore((s: TasksState) => s.getComments);
-	const addComment = useTasksStore((s: TasksState) => s.addComment);
+	const authUser = useAuthStore((s: { user: User | null }) => s.user);
+	const getComments = useTasksStore((s) => s.getComments);
+	const addComment = useTasksStore((s) => s.addComment);
 
 	const [text, setText] = useState("");
 
@@ -138,13 +137,13 @@ export default function TaskCommentsScreen() {
 							</HText>
 						) : (
 							<View className="gap-4">
-								{comments.map((comment: TaskCommentType) => (
+								{comments.map((comment: Comment) => (
 									<View
 										key={comment.id}
 										className="flex-row gap-3"
 									>
 										<Image
-											source={{ uri: comment.avatar }}
+											source={{ uri: comment.author?.avatar_url ?? DEFAULT_AVATAR }}
 											style={{
 												width: 40,
 												height: 40,
@@ -158,7 +157,7 @@ export default function TaskCommentsScreen() {
 													weight="bold"
 													color="foreground"
 												>
-													{comment.author}
+													{comment.author?.name}
 												</HText>
 												<HText size="xs" color="muted">
 													{comment.timeAgo}

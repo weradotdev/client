@@ -65,7 +65,7 @@ export default function AppTabs() {
 			/>
 
 			<Tabs.Screen
-				name="(add)"
+				name="add"
 				options={{
 					href: user && ['qa', 'owner', 'project_manager'].includes(user.type) ? undefined : null,
 					tabBarIcon: () => (
@@ -82,7 +82,7 @@ export default function AppTabs() {
 			/>
 
 			<Tabs.Screen
-				name="(updates)"
+				name="updates"
 				options={{
 					href: user && ['developer'].includes(user.type) ? undefined : null,
 					tabBarLabel: "Updates",
@@ -97,7 +97,7 @@ export default function AppTabs() {
 			/>
 
 			<Tabs.Screen
-				name="(notifications)"
+				name="notifications"
 				options={{
 					tabBarLabel: "Notifications",
 					tabBarBadge: notifications?.total ?? undefined,

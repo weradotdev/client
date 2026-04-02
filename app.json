@@ -14,12 +14,12 @@
       "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
+      // "adaptiveIcon": {
+      //   "backgroundColor": "#E6F4FE",
+      //   "foregroundImage": "./assets/images/android-icon-foreground.png",
+      //   "backgroundImage": "./assets/images/android-icon-background.png",
+      //   "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      // },
       "predictiveBackGestureEnabled": false,
       "package": "dev.dot.wera",
       "googleServicesFile": "./google-services.json"
@@ -39,6 +39,61 @@
             "imageWidth": 76
           }
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/images/icon.png",
+          "color": "#0097b2",
+          "sounds": [],
+          "defaultChannel": "task-reminders"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you update your profile."
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Zahra to access your camera to take photos for chats and tasks.",
+          "microphonePermission": "Allow Zahra to record voice notes.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-font",
+        {
+          "fonts": [
+            "node_modules/@expo-google-fonts/ibm-plex-mono/100Thin/IBMPlexMono_100Thin.ttf",
+            "node_modules/@expo-google-fonts/ibm-plex-mono/300Light/IBMPlexMono_300Light.ttf",
+            "node_modules/@expo-google-fonts/ibm-plex-mono/400Regular/IBMPlexMono_400Regular.ttf",
+            "node_modules/@expo-google-fonts/ibm-plex-mono/500Medium/IBMPlexMono_500Medium.ttf",
+            "node_modules/@expo-google-fonts/ibm-plex-mono/600SemiBold/IBMPlexMono_600SemiBold.ttf",
+            "node_modules/@expo-google-fonts/ibm-plex-mono/700Bold/IBMPlexMono_700Bold.ttf"
+          ]
+        }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static",
+            "deploymentTarget": "16.0"
+          },
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "enableShrinkResourcesInReleaseBuilds": true,
+            "useLegacyPackaging": true,
+            "compileSdkVersion": 36,
+            "targetSdkVersion": 36,
+            "minSdkVersion": 24,
+            "extraProguardRules": "-keep class com.rnwhisper.** { *; }",
+            "enableMinifyInReleaseBuilds": true
+          }
+        }
       ]
     ],
     "experiments": {
@@ -51,6 +106,12 @@
         "projectId": "bc6a78f9-38b8-4180-9fdb-97c87214fc36"
       }
     },
-    "owner": "weradotdev"
+    "owner": "weradotdev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/bc6a78f9-38b8-4180-9fdb-97c87214fc36"
+    }
   }
 }

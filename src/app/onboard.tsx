@@ -5,16 +5,16 @@ import {
 	KeyboardAvoidingView,
 	NativeScrollEvent,
 	NativeSyntheticEvent,
-	Platform,
 	Pressable,
 	View,
 } from "react-native";
 import { Href, useRouter } from "expo-router";
-import React, { useCallback, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import HPressable from "@/components/pressable";
 import HText from "@/components/text";
 import HTextInput from "@/components/text-input";
+import { KeyboardStickyView } from "react-native-keyboard-controller";
 import { twMerge } from "tailwind-merge";
 import { useAuthStore } from "@/stores/auth";
 import { useForm } from "@tanstack/react-form";
@@ -29,10 +29,8 @@ const ONBOARD_ILLUSTRATIONS = {
 		"https://images.unsplash.com/photo-1497366216548-37526070297c?q=80",
 	projects:
 		"https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80",
-	tasks:
-		"https://images.unsplash.com/photo-1484480974693-6ca0a610fb2c?q=80",
-	connect:
-		"https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80",
+	tasks: "https://images.unsplash.com/photo-1484480974693-6ca0a610fb2c?q=80",
+	connect: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?q=80",
 } as const;
 
 type OnboardValues = { baseUrl: string };
@@ -48,19 +46,22 @@ const STEPS: OnboardStep[] = [
 	{
 		id: "welcome",
 		title: "Organize work your way",
-		subtitle: "Track projects and tasks in one place. Simple, flexible, and built for how you work.",
+		subtitle:
+			"Track projects and tasks in one place. Simple, flexible, and built for how you work.",
 		imageKey: "welcome",
 	},
 	{
 		id: "projects",
 		title: "Projects",
-		subtitle: "Create projects to group related work. Add boards, invite your team, and keep everything in sync.",
+		subtitle:
+			"Create projects to group related work. Add boards, invite your team, and keep everything in sync.",
 		imageKey: "projects",
 	},
 	{
 		id: "tasks",
 		title: "Tasks & boards",
-		subtitle: "Add tasks, set due dates, move cards across columns, and track progress at a glance.",
+		subtitle:
+			"Add tasks, set due dates, move cards across columns, and track progress at a glance.",
 		imageKey: "tasks",
 	},
 ];
@@ -68,9 +69,9 @@ const STEPS: OnboardStep[] = [
 export default function OnboardScreen() {
 	const router = useRouter();
 	const insets = useSafeAreaInsets();
-	const baseUrl = useAuthStore((s) => s.baseUrl);
-	const setBaseUrl = useAuthStore((s) => s.setBaseUrl);
-	const setOnboarded = useAuthStore((s) => s.setOnboarded);
+	const baseUrl = useAuthStore(s => s.baseUrl);
+	const setBaseUrl = useAuthStore(s => s.setBaseUrl);
+	const setOnboarded = useAuthStore(s => s.setOnboarded);
 
 	const flatListRef = useRef<FlatList>(null);
 	const [currentIndex, setCurrentIndex] = useState(0);
@@ -94,11 +95,14 @@ export default function OnboardScreen() {
 		},
 	});
 
-	const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-		const x = e.nativeEvent.contentOffset.x;
-		const index = Math.round(x / SCREEN_WIDTH);
-		setCurrentIndex(index);
-	}, []);
+	const onScroll = useCallback(
+		(e: NativeSyntheticEvent<NativeScrollEvent>) => {
+			const x = e.nativeEvent.contentOffset.x;
+			const index = Math.round(x / SCREEN_WIDTH);
+			setCurrentIndex(index);
+		},
+		[],
+	);
 
 	const goNext = useCallback(() => {
 		if (isLastStep) {
@@ -111,25 +115,38 @@ export default function OnboardScreen() {
 	}, [currentIndex, isLastStep, OnboardForm]);
 
 	const goToEnd = useCallback(() => {
-		flatListRef.current?.scrollToIndex({ index: STEPS.length, animated: true });
+		flatListRef.current?.scrollToIndex({
+			index: STEPS.length,
+			animated: true,
+		});
 		setCurrentIndex(STEPS.length);
 	}, []);
 
 	const renderStep = useCallback(
 		({ item }: { item: OnboardStep }) => (
-			<View style={{ width: SCREEN_WIDTH }} className="flex-1 px-8 pt-8 pb-4">
+			<View
+				style={{ width: SCREEN_WIDTH }}
+				className="flex-1 px-8 pt-8 pb-4"
+			>
 				<View className="flex-1 justify-center items-center">
 					<View
 						className="aspect-square mb-8"
 						style={{ width: SCREEN_WIDTH * 0.8, maxWidth: 360 }}
 					>
 						<Image
-							source={{ uri: ONBOARD_ILLUSTRATIONS[item.imageKey] }}
+							source={{
+								uri: ONBOARD_ILLUSTRATIONS[item.imageKey],
+							}}
 							className="w-full h-full"
 							resizeMode="contain"
 						/>
 					</View>
-					<HText size="2xl" weight="bold" color="foreground" className="text-center">
+					<HText
+						size="2xl"
+						weight="bold"
+						color="foreground"
+						className="text-center"
+					>
 						{item.title}
 					</HText>
 					<HText
@@ -147,7 +164,10 @@ export default function OnboardScreen() {
 
 	const renderConnectStep = useCallback(
 		() => (
-			<View style={{ width: SCREEN_WIDTH }} className="flex-1 px-8 pt-8 pb-4">
+			<View
+				style={{ width: SCREEN_WIDTH }}
+				className="flex-1 px-8 pt-8 pb-4"
+			>
 				<View className="flex-1 justify-center max-w-sm self-center w-full">
 					<View
 						className="aspect-square mb-6 self-center"
@@ -162,9 +182,10 @@ export default function OnboardScreen() {
 					<HText size="2xl" weight="bold" color="foreground">
 						Connect your workspace
 					</HText>
-                    
+
 					<HText size="sm" color="muted" className="mt-2">
-						Enter your API base URL. You can change this later in settings.
+						Enter your API base URL. You can change this later in
+						settings.
 					</HText>
 
 					<OnboardForm.Field
@@ -174,7 +195,11 @@ export default function OnboardScreen() {
 								const v = value?.trim();
 								if (!v) return "URL is required";
 								try {
-									new URL(v.startsWith("http") ? v : `https://${v}`);
+									new URL(
+										v.startsWith("http")
+											? v
+											: `https://${v}`,
+									);
 								} catch {
 									return "Enter a valid URL";
 								}
@@ -182,12 +207,14 @@ export default function OnboardScreen() {
 							},
 						}}
 					>
-						{(baseUrlField) => (
+						{baseUrlField => (
 							<View className="mt-6">
 								<HTextInput
 									label="Base URL"
 									value={baseUrlField.state.value}
-									onChangeText={(v) => baseUrlField.handleChange(v)}
+									onChangeText={v =>
+										baseUrlField.handleChange(v)
+									}
 									onBlur={baseUrlField.handleBlur}
 									errors={baseUrlField.state.meta.errors}
 									placeholder="https://api.example.com"
@@ -219,16 +246,20 @@ export default function OnboardScreen() {
 	);
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS === "ios" ? "padding" : undefined}
+		<KeyboardStickyView
 			className="flex-1 bg-background"
+			offset={{ opened: -3 }}
+			style={{ flex: 1 }}
 		>
 			<FlatList
 				ref={flatListRef}
 				data={data}
-				keyExtractor={(item) => item.id}
+				keyExtractor={item => item.id}
 				renderItem={({ item }) =>
-					item.id === "connect" ? renderConnectStep() : renderStep({ item: item as OnboardStep })}
+					item.id === "connect"
+						? renderConnectStep()
+						: renderStep({ item: item as OnboardStep })
+				}
 				horizontal
 				pagingEnabled
 				showsHorizontalScrollIndicator={false}
@@ -244,19 +275,27 @@ export default function OnboardScreen() {
 					<Pressable
 						key={index}
 						onPress={() => {
-							flatListRef.current?.scrollToIndex({ index, animated: true });
+							flatListRef.current?.scrollToIndex({
+								index,
+								animated: true,
+							});
 							setCurrentIndex(index);
 						}}
 						className={twMerge(
 							"rounded-full h-2",
-							currentIndex === index ? "w-5 bg-primary" : "w-2 bg-primary/30",
+							currentIndex === index
+								? "w-5 bg-primary"
+								: "w-2 bg-primary/30",
 						)}
 					/>
 				))}
 			</View>
 
 			{/* Bottom actions */}
-			<View className="px-8 pt-2 gap-3" style={{ paddingBottom: Math.max(insets.bottom, 24) }}>
+			<View
+				className="px-8 pt-2 gap-3"
+				style={{ paddingBottom: Math.max(insets.bottom, 24) }}
+			>
 				{!isLastStep && (
 					<Pressable onPress={goToEnd} className="py-2">
 						<HText size="sm" color="muted" className="text-center">
@@ -264,9 +303,9 @@ export default function OnboardScreen() {
 						</HText>
 					</Pressable>
 				)}
-				
+
 				<OnboardForm.Subscribe
-					selector={(state) => [state.canSubmit, state.isSubmitting]}
+					selector={state => [state.canSubmit, state.isSubmitting]}
 				>
 					{([canSubmit, isSubmitting]) => (
 						<HPressable
@@ -279,13 +318,20 @@ export default function OnboardScreen() {
 							}
 							variant="primary"
 							size="lg"
-							disabled={isLastStep ? !canSubmit || onboardMutation.isPending : false}
-							isLoading={isLastStep && (isSubmitting || onboardMutation.isPending)}
+							disabled={
+								isLastStep
+									? !canSubmit || onboardMutation.isPending
+									: false
+							}
+							isLoading={
+								isLastStep &&
+								(isSubmitting || onboardMutation.isPending)
+							}
 							onPress={goNext}
 						/>
 					)}
 				</OnboardForm.Subscribe>
 			</View>
-		</KeyboardAvoidingView>
+		</KeyboardStickyView>
 	);
 }

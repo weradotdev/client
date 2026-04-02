@@ -45,9 +45,9 @@ const SIZE_CLASS: Record<HTextSize, string> = {
 };
 
 const FONT_CLASS: Record<HTextWeight, string> = {
-	thin: "font-sans",
-	extralight: "font-sans",
-	light: "font-sans",
+	thin: "font-sans-thin",
+	extralight: "font-sans-extralight",
+	light: "font-sans-light",
 	normal: "font-sans",
 	medium: "font-sans-medium",
 	semibold: "font-sans-semibold",

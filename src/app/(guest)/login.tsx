@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import { api, handleValidationErrors } from "@/lib/api";
 
-import type { AuthTokenResponse } from "@/lib/models";
 import HPressable from "@/components/pressable";
 import HText from "@/components/text";
 import HTextInput from "@/components/text-input";
@@ -163,7 +162,7 @@ export default function LoginScreen() {
 						<HPressable
 							variant="outline"
 							size="lg"
-							label="Don’t have an account? Create one"
+							label="No account? Create one"
 						/>
 					</Link>
 				</View>

@@ -22,6 +22,7 @@ import {
 import { useCSSVariable } from "uniwind";
 import { type TasksState, useTasksStore } from "@/stores/tasks";
 import Carousel from "@/components/carousel";
+import { HeaderBackButton } from "@react-navigation/elements";
 
 const DATE_RANGE = "Feb 23, 2026 - Feb 28, 2026";
 
@@ -110,6 +111,7 @@ export default function TaskDetailsScreen() {
 					title: "Task details",
 					headerTitleAlign: "center",
 					headerShadowVisible: false,
+					headerLeft: () => <HeaderBackButton tintColor={String(primaryColor)} onPress={() => router.back()} />,
 					headerRight: () => headerRight,
 					headerBackTitle: "Back",
 					headerStyle: { backgroundColor: String(backgroundColor) },

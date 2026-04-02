@@ -28,9 +28,11 @@ export default function TasksScreen() {
 		refetch: refetchTasks,
 		isFetching: isFetchingTasks,
 	} = useQuery({
-		queryKey: ["tasks"],
+		queryKey: ["tasks", search, user?.id],
 		queryFn: () =>
-			api<Task>("tasks").search("", ["forUser", { userId: user?.id }]),
+			api<Task>("tasks").search(search, [
+				{ name: "forUser", parameters: [{ userId: user?.id }] },
+			]),
 	});
 
 	const priority = useFiltersStore(s => s.priority);
@@ -83,7 +85,10 @@ export default function TasksScreen() {
 
 	const renderItem = useCallback(
 		({ item }: { item: (typeof filteredTasks)[number] }) => (
-			<TaskCard task={item} onPress={() => onTaskPress(Number(item.id))} />
+			<TaskCard
+				task={item}
+				onPress={() => onTaskPress(Number(item.id))}
+			/>
 		),
 		[onTaskPress],
 	);
@@ -122,6 +127,7 @@ export default function TasksScreen() {
 					headerShown: true,
 					headerBackTitle: "Back",
 					headerShadowVisible: false,
+					headerTransparent: true,
 					headerStyle: { backgroundColor: String(backgroundColor) },
 					headerTitle: "Tasks",
 					headerLeft: () => (
@@ -157,7 +163,8 @@ export default function TasksScreen() {
 
 			<FlatList
 				className="flex-1 px-3 bg-background"
-				contentContainerClassName="pb-40 gap-4"
+				contentContainerClassName="ios:pt-28 pb-40 gap-4"
+				showsVerticalScrollIndicator={false}
 				data={filteredTasks}
 				renderItem={renderItem}
 				ListHeaderComponent={ListHeader}
@@ -179,7 +186,6 @@ export default function TasksScreen() {
 						</Pressable>
 					</View>
 				}
-				showsVerticalScrollIndicator={false}
 			/>
 		</>
 	);

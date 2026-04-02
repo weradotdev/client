@@ -21,15 +21,27 @@ export default function AccountScreen() {
 
 	const AccountForm = useForm({
 		defaultValues: {
-			name: user?.name || "",
+			first_name: user?.first_name || "",
+			last_name: user?.last_name || "",
 			email: user?.email || "",
 			phone: user?.phone || "",
+			gender: user?.gender || "",
+			dob: user?.dob || "",
 		},
 		onSubmit: async ({ value }) => {
 			setUser({
-				name: value?.name?.trim() || "",
+				...user,
+				id: user?.id || 0,
+				name: `${value.first_name} ${value.last_name}`.trim(),
+				first_name: value?.first_name?.trim() || "",
+				last_name: value?.last_name?.trim() || "",
 				email: value?.email?.trim() || "",
 				phone: value?.phone?.trim() || "",
+				gender: value?.gender || "",
+				dob: value?.dob || "",
+				type: user?.type || "developer",
+				avatar: user?.avatar || "",
+				avatar_url: user?.avatar_url || "",
 			});
 		},
 	});
@@ -63,12 +75,24 @@ export default function AccountScreen() {
 					Display name
 				</HText>
 
-				<AccountForm.Field name="name">
-					{nameField => (
+				<AccountForm.Field name="first_name">
+					{firstNameField => (
 						<HTextInput
-							placeholder="Your name"
-							value={nameField.state.value}
-							onChangeText={nameField.handleChange}
+							placeholder="First name"
+							value={firstNameField.state.value}
+							onChangeText={firstNameField.handleChange}
+							autoCapitalize="words"
+							className="mb-6"
+						/>
+					)}
+				</AccountForm.Field>
+
+				<AccountForm.Field name="last_name">
+					{lastNameField => (
+						<HTextInput
+							placeholder="Last name"
+							value={lastNameField.state.value}
+							onChangeText={lastNameField.handleChange}
 							autoCapitalize="words"
 							className="mb-6"
 						/>
@@ -111,7 +135,7 @@ export default function AccountScreen() {
 				<HText size="sm" color="muted" className="mb-4">
 					Base API URL
 				</HText>
-				
+
 				<HTextInput
 					placeholder="https://api.wera.dev"
 					value={baseUrl}
